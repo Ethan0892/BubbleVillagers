@@ -81,7 +81,7 @@ mvn clean package
 dir target\BubbleVillagers-*.jar
 
 # Copy to test server
-copy target\BubbleVillagers-2.0.0.jar "path\to\testserver\plugins\"
+copy target\BubbleVillagers-2.0.2.jar "path\to\testserver\plugins\"
 
 # Start server and test
 ```
@@ -131,7 +131,7 @@ Once verified:
 
 ### Spigot
 1. Go to: https://www.spigotmc.org/resources/
-2. Upload `target/BubbleVillagers-2.0.0.jar`
+2. Upload `target/BubbleVillagers-2.0.2.jar`
 3. Use `DESCRIPTION.md` for description
 4. Set versions: 1.16.5 - 1.21.4
 

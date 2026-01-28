@@ -32,9 +32,6 @@ public class LevelOptimizedProfession extends VillagerOptimizerModule implements
     public LevelOptimizedProfession() {
         super("gameplay.level-optimized-profession");
         Config config = VillagerOptimizer.config();
-        config.master().addComment(configPath,
-                "This is needed to allow optimized villagers to level up.\n" +
-                "Temporarily enables the villagers AI to allow it to level up and then disables it again.");
         this.cooldown_millis = TimeUnit.SECONDS.toMillis(
                 config.getInt(configPath + ".level-check-cooldown-seconds", 5,
                 "Cooldown in seconds until the level of a villager will be checked and updated again.\n" +

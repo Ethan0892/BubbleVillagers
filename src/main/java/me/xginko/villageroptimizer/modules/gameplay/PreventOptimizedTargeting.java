@@ -17,8 +17,6 @@ public class PreventOptimizedTargeting extends VillagerOptimizerModule implement
 
     public PreventOptimizedTargeting() {
         super("gameplay.prevent-entities-from-targeting-optimized");
-        config.master().addComment(configPath + ".enable",
-                "Prevents hostile entities from targeting optimized villagers.");
     }
 
     @Override

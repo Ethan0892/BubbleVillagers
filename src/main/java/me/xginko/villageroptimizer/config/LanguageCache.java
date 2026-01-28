@@ -1,20 +1,22 @@
 package me.xginko.villageroptimizer.config;
 
-import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LanguageCache {
 
-    private final @NotNull ConfigFile lang;
+    private final @NotNull File langFile;
+    private final @NotNull YamlConfiguration lang;
 
     public final @NotNull Component no_permission;
     public final @NotNull List<Component> nametag_optimize_success, nametag_on_optimize_cooldown, nametag_unoptimize_success,
@@ -27,16 +29,16 @@ public class LanguageCache {
 
     public LanguageCache(String locale) throws Exception {
         VillagerOptimizer plugin = VillagerOptimizer.getInstance();
-        File langYML = new File(plugin.getDataFolder() + File.separator + "lang", locale + ".yml");
+        this.langFile = new File(plugin.getDataFolder() + File.separator + "lang", locale + ".yml");
         // Check if the lang folder has already been created
-        File parent = langYML.getParentFile();
-        if (!parent.exists() && !parent.mkdir())
+        File parent = this.langFile.getParentFile();
+        if (!parent.exists() && !parent.mkdirs())
             VillagerOptimizer.logger().error("Failed to create lang directory.");
         // Check if the file already exists and save the one from the plugin's resources folder if it does not
-        if (!langYML.exists())
+        if (!this.langFile.exists())
             plugin.saveResource("lang/" + locale + ".yml", false);
-        // Finally, load the lang file with configmaster
-        this.lang = ConfigFile.loadConfig(langYML);
+        // Finally, load the lang file with YamlConfiguration
+        this.lang = YamlConfiguration.loadConfiguration(this.langFile);
 
         // General
         this.no_permission = getTranslation("messages.no-permission",
@@ -89,19 +91,28 @@ public class LanguageCache {
                 "<gray>Couldn't find any employed villagers within a radius of %radius%.");
 
         try {
-            this.lang.save();
-        } catch (Throwable throwable) {
-            VillagerOptimizer.logger().error("Failed to save language file: " + langYML.getName(), throwable);
+            this.lang.options().copyDefaults(true);
+            this.lang.save(this.langFile);
+        } catch (IOException e) {
+            VillagerOptimizer.logger().error("Failed to save language file: " + this.langFile.getName(), e);
         }
     }
 
     public @NotNull Component getTranslation(@NotNull String path, @NotNull String defaultTranslation) {
         this.lang.addDefault(path, defaultTranslation);
-        return MiniMessage.miniMessage().deserialize(KyoriUtil.translateChatColor(this.lang.getString(path, defaultTranslation)));
+        String translation = this.lang.getString(path, defaultTranslation);
+        return MiniMessage.miniMessage().deserialize(KyoriUtil.translateChatColor(translation));
     }
 
     public @NotNull List<Component> getListTranslation(@NotNull String path, @NotNull String... defaultTranslation) {
         this.lang.addDefault(path, Arrays.asList(defaultTranslation));
-        return this.lang.getStringList(path).stream().map(KyoriUtil::translateChatColor).map(MiniMessage.miniMessage()::deserialize).collect(Collectors.toList());
+        List<String> translations = this.lang.getStringList(path);
+        if (translations.isEmpty()) {
+            translations = Arrays.asList(defaultTranslation);
+        }
+        return translations.stream()
+                .map(KyoriUtil::translateChatColor)
+                .map(MiniMessage.miniMessage()::deserialize)
+                .collect(Collectors.toList());
     }
 }

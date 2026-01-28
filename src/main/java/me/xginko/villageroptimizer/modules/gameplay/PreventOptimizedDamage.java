@@ -23,8 +23,6 @@ public class PreventOptimizedDamage extends VillagerOptimizerModule implements L
 
     public PreventOptimizedDamage() {
         super("gameplay.prevent-damage-to-optimized");
-        config.master().addComment(configPath + ".enable",
-                "Configure what kind of damage you want to cancel for optimized villagers here.");
         this.cancel_knockback = config.getBoolean(configPath + ".prevent-knockback-from-entity", true,
                 "Prevents optimized villagers from getting knocked back by an attacking entity");
         this.damage_causes_to_cancel = config.getList(configPath + ".damage-causes-to-cancel",

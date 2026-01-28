@@ -40,9 +40,6 @@ public class OptimizeByNametag extends VillagerOptimizerModule implements Listen
 
     public OptimizeByNametag() {
         super("optimization-methods.nametag-optimization");
-        config.master().addComment(configPath + ".enable",
-                "Enable optimization by naming villagers to one of the names configured below.\n" +
-                "Nametag optimized villagers will be unoptimized again when they are renamed to something else.");
         this.nametags = config.getList(configPath + ".names", Arrays.asList("Optimize", "DisableAI"),
                 "Names are case insensitive, capital letters won't matter.")
                 .stream().map(String::toLowerCase).collect(Collectors.toCollection(HashSet::new));

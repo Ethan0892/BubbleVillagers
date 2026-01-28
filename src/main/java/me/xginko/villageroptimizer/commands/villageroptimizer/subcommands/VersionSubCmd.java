@@ -1,6 +1,4 @@
 package me.xginko.villageroptimizer.commands.villageroptimizer.subcommands;
-
-import io.papermc.paper.plugin.configuration.PluginMeta;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.commands.SubCommand;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -47,17 +45,19 @@ public class VersionSubCmd extends SubCommand {
         String name, version, website, author;
 
         try {
-            final PluginMeta pluginMeta = VillagerOptimizer.getInstance().getPluginMeta();
-            name = pluginMeta.getName();
-            version = pluginMeta.getVersion();
-            website = pluginMeta.getWebsite();
-            author = pluginMeta.getAuthors().get(0);
+            final Object pluginMeta = VillagerOptimizer.getInstance().getClass().getMethod("getPluginMeta").invoke(VillagerOptimizer.getInstance());
+            name = (String) pluginMeta.getClass().getMethod("getName").invoke(pluginMeta);
+            version = (String) pluginMeta.getClass().getMethod("getVersion").invoke(pluginMeta);
+            website = (String) pluginMeta.getClass().getMethod("getWebsite").invoke(pluginMeta);
+            @SuppressWarnings("unchecked")
+            final List<String> authors = (List<String>) pluginMeta.getClass().getMethod("getAuthors").invoke(pluginMeta);
+            author = authors.isEmpty() ? "unknown" : authors.get(0);
         } catch (Throwable versionIncompatible) {
             final PluginDescriptionFile pluginYML = VillagerOptimizer.getInstance().getDescription();
             name = pluginYML.getName();
             version = pluginYML.getVersion();
             website = pluginYML.getWebsite();
-            author = pluginYML.getAuthors().get(0);
+            author = pluginYML.getAuthors().isEmpty() ? "unknown" : pluginYML.getAuthors().get(0);
         }
 
         KyoriUtil.sendMessage(sender, Component.newline()

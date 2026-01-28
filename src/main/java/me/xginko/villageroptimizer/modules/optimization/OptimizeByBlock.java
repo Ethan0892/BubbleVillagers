@@ -42,9 +42,6 @@ public class OptimizeByBlock extends VillagerOptimizerModule implements Listener
 
     public OptimizeByBlock() {
         super("optimization-methods.block-optimization");
-        config.master().addComment(configPath + ".enable",
-                "When enabled, the closest villager standing near a configured block being placed will be optimized.\n" +
-                "If a configured block is broken nearby, the closest villager will become unoptimized again.");
         List<String> defaults = Stream.of(XMaterial.LAPIS_BLOCK, XMaterial.GLOWSTONE, XMaterial.IRON_BLOCK)
                 .filter(XMaterial::isSupported)
                 .map(Enum::name)

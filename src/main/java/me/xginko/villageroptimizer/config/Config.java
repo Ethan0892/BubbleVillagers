@@ -1,24 +1,39 @@
 package me.xginko.villageroptimizer.config;
 
-import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xginko.villageroptimizer.VillagerOptimizer;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 
 public class Config {
 
-    private final @NotNull ConfigFile config;
+    private final @NotNull File configFile;
+    private final @NotNull YamlConfiguration config;
     public final @NotNull Locale default_lang;
     public final @NotNull Duration cache_keep_time;
     public final boolean auto_lang, support_other_plugins;
 
     public Config() throws Exception {
-        // Load config.yml with ConfigMaster
-        this.config = ConfigFile.loadConfig(new File(VillagerOptimizer.getInstance().getDataFolder(), "config.yml"));
+        // Load config.yml with Bukkit YamlConfiguration
+        VillagerOptimizer plugin = VillagerOptimizer.getInstance();
+        this.configFile = new File(plugin.getDataFolder(), "config.yml");
+        
+        // Create plugin folder if it doesn't exist
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdirs();
+        }
+        
+        // Save default config if it doesn't exist
+        if (!this.configFile.exists()) {
+            plugin.saveResource("config.yml", false);
+        }
+        
+        this.config = YamlConfiguration.loadConfiguration(this.configFile);
 
         structureConfig();
 
@@ -40,91 +55,101 @@ public class Config {
 
     public void saveConfig() {
         try {
-            this.config.save();
-        } catch (Throwable throwable) {
-            VillagerOptimizer.logger().error("Failed to save config file!", throwable);
+            this.config.save(this.configFile);
+        } catch (IOException e) {
+            VillagerOptimizer.logger().error("Failed to save config file!", e);
         }
     }
 
     private void structureConfig() {
-        this.config.addDefault("config-version", 1.00);
-        this.createTitledSection("General", "general");
-        this.createTitledSection("Optimization", "optimization-methods");
-        this.config.addDefault("optimization-methods.commands.unoptimizevillagers", null);
-        this.config.addComment("optimization-methods.commands",
-                "If you want to disable commands, negate the following permissions:\n" +
-                "villageroptimizer.cmd.optimize\n" +
-                "villageroptimizer.cmd.unoptimize");
-        this.config.addDefault("optimization-methods.nametag-optimization.enable", true);
-        this.createTitledSection("Villager Chunk Limit", "villager-chunk-limit");
-        this.createTitledSection("Gameplay", "gameplay");
-        this.config.addDefault("gameplay.prevent-trading-with-unoptimized.enable", false);
-        this.config.addDefault("gameplay.restock-optimized-trades", null);
-        this.config.addDefault("gameplay.level-optimized-profession", null);
-        this.config.addDefault("gameplay.unoptimize-on-job-loose.enable", true);
-        this.config.addDefault("gameplay.villagers-can-be-leashed.enable", true);
-        this.config.addDefault("gameplay.villagers-spawn-as-adults.enable", false);
-        this.config.addDefault("gameplay.rename-optimized-villagers.enable", false);
-        this.config.addDefault("gameplay.prevent-entities-from-targeting-optimized.enable", true);
-        this.config.addDefault("gameplay.prevent-damage-to-optimized.enable", true);
+        // Set defaults for all config values
+        config.addDefault("config-version", 1.00);
+        config.addDefault("general.default-language", "en_us");
+        config.addDefault("general.auto-language", true);
+        config.addDefault("general.cache-keep-time-seconds", 30);
+        config.addDefault("general.support-avl-villagers", false);
+        
+        config.addDefault("optimization-methods.nametag-optimization.enable", true);
+        config.addDefault("optimization-methods.commands.unoptimizevillagers", true);
+
+        config.addDefault("optimization-methods.auto-optimize-chunk-population.enable", false);
+        config.addDefault("optimization-methods.auto-optimize-chunk-population.threshold", 20);
+        config.addDefault("optimization-methods.auto-optimize-chunk-population.check-period-ticks", 200);
+
+        config.addDefault("optimization-methods.auto-optimize-trade-hall-population.enable", false);
+        config.addDefault("optimization-methods.auto-optimize-trade-hall-population.population", 20);
+        config.addDefault("optimization-methods.auto-optimize-trade-hall-population.radius-blocks", 16.0);
+        config.addDefault("optimization-methods.auto-optimize-trade-hall-population.check-period-ticks", 200);
+        
+        config.addDefault("gameplay.prevent-trading-with-unoptimized.enable", false);
+        config.addDefault("gameplay.unoptimize-on-job-loose.enable", true);
+        config.addDefault("gameplay.villagers-can-be-leashed.enable", true);
+        config.addDefault("gameplay.villagers-spawn-as-adults.enable", false);
+        config.addDefault("gameplay.rename-optimized-villagers.enable", false);
+        config.addDefault("gameplay.outline-optimized-villagers.enable", false);
+        config.addDefault("gameplay.prevent-entities-from-targeting-optimized.enable", true);
+        config.addDefault("gameplay.prevent-damage-to-optimized.enable", true);
+        
+        config.options().copyDefaults(true);
+        saveConfig();
     }
 
-    public void createTitledSection(@NotNull String title, @NotNull String path) {
-        this.config.addSection(title);
-        this.config.addDefault(path, null);
-    }
-
-    public @NotNull ConfigFile master() {
+    public @NotNull YamlConfiguration master() {
         return this.config;
     }
 
     public boolean getBoolean(@NotNull String path, boolean def, @NotNull String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getBoolean(path, def);
+        // Comments are not supported in YamlConfiguration, but we can log them if needed
+        config.addDefault(path, def);
+        return config.getBoolean(path, def);
     }
 
     public boolean getBoolean(@NotNull String path, boolean def) {
-        this.config.addDefault(path, def);
-        return this.config.getBoolean(path, def);
+        config.addDefault(path, def);
+        return config.getBoolean(path, def);
     }
 
     public @NotNull String getString(@NotNull String path, @NotNull String def, @NotNull String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getString(path, def);
+        config.addDefault(path, def);
+        return config.getString(path, def);
     }
 
     public @NotNull String getString(@NotNull String path, @NotNull String def) {
-        this.config.addDefault(path, def);
-        return this.config.getString(path, def);
+        config.addDefault(path, def);
+        return config.getString(path, def);
     }
 
     public double getDouble(@NotNull String path, @NotNull Double def, @NotNull String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getDouble(path, def);
+        config.addDefault(path, def);
+        return config.getDouble(path, def);
     }
 
     public double getDouble(@NotNull String path, @NotNull Double def) {
-        this.config.addDefault(path, def);
-        return this.config.getDouble(path, def);
+        config.addDefault(path, def);
+        return config.getDouble(path, def);
     }
 
     public int getInt(@NotNull String path, int def, @NotNull String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getInteger(path, def);
+        config.addDefault(path, def);
+        return config.getInt(path, def);
     }
 
     public int getInt(@NotNull String path, int def) {
-        this.config.addDefault(path, def);
-        return this.config.getInteger(path, def);
+        config.addDefault(path, def);
+        return config.getInt(path, def);
     }
 
+    @SuppressWarnings("unchecked")
     public @NotNull <T> List<T> getList(@NotNull String path, @NotNull List<T> def, @NotNull String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getList(path);
+        config.addDefault(path, def);
+        List<?> list = config.getList(path, def);
+        return (List<T>) list;
     }
 
+    @SuppressWarnings("unchecked")
     public @NotNull <T> List<T> getList(@NotNull String path, @NotNull List<T> def) {
-        this.config.addDefault(path, def);
-        return this.config.getList(path);
+        config.addDefault(path, def);
+        List<?> list = config.getList(path, def);
+        return (List<T>) list;
     }
 }

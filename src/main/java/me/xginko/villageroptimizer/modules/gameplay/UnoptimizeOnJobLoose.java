@@ -13,8 +13,6 @@ public class UnoptimizeOnJobLoose extends VillagerOptimizerModule implements Lis
 
     public UnoptimizeOnJobLoose() {
         super("gameplay.unoptimize-on-job-loose");
-        config.master().addComment(configPath + ".enable",
-                "Villagers that get their jobs reset will become unoptimized again.");
     }
 
     @Override

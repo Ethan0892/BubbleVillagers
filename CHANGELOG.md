@@ -5,6 +5,29 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] - 2026-01-08
+
+### ✨ Added
+- Added `/villageroptimizer clearglow` admin subcommand to remove glow from optimized villagers in loaded chunks.
+- Added `/villageroptimizer glow <on|off>` admin subcommand to enable/disable optimized villager glow at runtime.
+- Added two new config-driven auto-optimization modes:
+  - Auto-optimize when a chunk exceeds a villager population threshold.
+  - Auto-optimize when a trade hall (radius) reaches a villager population threshold.
+
+### 🔄 Changed
+- When enabled, optimized villager glow is now applied for already-optimized villagers in loaded chunks and newly loaded chunks (not only at the moment of optimization).
+
+### 🐛 Fixed
+- Fixed “optimized villagers stay glowing after restart” when the outline feature is disabled by clearing glow on startup/chunk-load.
+
+### 🧪 Testing
+- Added MockBukkit-based tests for plugin lifecycle and key optimization/glow behaviors.
+
+## [2.0.1] - 2026-01-08
+
+### 🐛 Fixed
+- Fixed `ClassCastException` on some Paper builds when reading `gameplay.restock-optimized-trades.restock-times` (e.g. `Integer` vs `Long`) which could error when right-clicking optimized villagers.
+
 ## [2.0.0] - 2024-12-15
 
 ### 🎉 Major Release - Rebranded as BubbleVillagers

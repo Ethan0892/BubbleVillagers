@@ -51,10 +51,6 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
 
     public OptimizeByActivity() {
         super("optimization-methods.regional-activity");
-        config.master().addComment(configPath + ".enable",
-                "Enable optimization by naming villagers to one of the names configured below.\n" +
-                "Nametag optimized villagers will be unoptimized again when they are renamed to something else.");
-
         this.checkRadius = config.getDouble(configPath + ".check-radius-blocks", 500.0,
                 "The radius in blocks in which activity will be grouped together and measured.");
         this.regionDataCache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMillis(

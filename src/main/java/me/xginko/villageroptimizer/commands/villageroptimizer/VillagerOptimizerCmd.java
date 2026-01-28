@@ -2,7 +2,9 @@ package me.xginko.villageroptimizer.commands.villageroptimizer;
 
 import me.xginko.villageroptimizer.commands.SubCommand;
 import me.xginko.villageroptimizer.commands.VillagerOptimizerCommand;
+import me.xginko.villageroptimizer.commands.villageroptimizer.subcommands.ClearGlowSubCmd;
 import me.xginko.villageroptimizer.commands.villageroptimizer.subcommands.DisableSubCmd;
+import me.xginko.villageroptimizer.commands.villageroptimizer.subcommands.GlowSubCmd;
 import me.xginko.villageroptimizer.commands.villageroptimizer.subcommands.ReloadSubCmd;
 import me.xginko.villageroptimizer.commands.villageroptimizer.subcommands.VersionSubCmd;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -27,7 +29,7 @@ public class VillagerOptimizerCmd extends VillagerOptimizerCommand {
 
     public VillagerOptimizerCmd() {
         super("villageroptimizer");
-        subCommands = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd(), new DisableSubCmd());
+        subCommands = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd(), new DisableSubCmd(), new GlowSubCmd(), new ClearGlowSubCmd());
         tabCompletes = subCommands.stream().map(SubCommand::label).collect(Collectors.toList());
     }
 

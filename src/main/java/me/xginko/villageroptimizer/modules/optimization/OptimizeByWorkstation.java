@@ -36,9 +36,6 @@ public class OptimizeByWorkstation extends VillagerOptimizerModule implements Li
 
     public OptimizeByWorkstation() {
         super("optimization-methods.workstation-optimization");
-        config.master().addComment(configPath + ".enable",
-                "When enabled, villagers that have a job and have been traded with at least once will become optimized,\n" +
-                "if near their workstation. If the workstation is broken, the villager will become unoptimized again.");
         this.check_duration_ticks = Math.max(config.getInt(configPath + ".check-linger-duration-ticks", 100,
                 "After a workstation has been placed, the plugin will wait for the configured amount of time in ticks\n" +
                 "for a villager to claim that workstation. Not recommended to go below 100 ticks."), 1);

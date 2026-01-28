@@ -6,7 +6,7 @@
 
     <groupId>me.xginko</groupId>
     <artifactId>BubbleVillagers</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.2</version>
     <packaging>jar</packaging>
 
     <name>BubbleVillagers</name>
@@ -16,7 +16,7 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <minecraft.version>1.21.4</minecraft.version>
+        <minecraft.version>1.21.10</minecraft.version>
     </properties>
 
     <build>
@@ -57,10 +57,6 @@
                                     <shadedPattern>me.xginko.villageroptimizer.libs.kyori</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>io.github.thatsmusic99.configurationmaster</pattern>
-                                    <shadedPattern>me.xginko.villageroptimizer.libs.configmaster</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.reflections</pattern>
                                     <shadedPattern>me.xginko.villageroptimizer.libs.reflections</shadedPattern>
                                 </relocation>
@@ -94,6 +90,15 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -130,21 +135,6 @@
             <artifactId>paper-api</artifactId>
             <version>${minecraft.version}-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        
-        <!-- Log4j for Paper compatibility -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.23.1</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <!-- Configuration Master API -->
-        <dependency>
-            <groupId>com.github.thatsmusic99</groupId>
-            <artifactId>ConfigurationMaster-API</artifactId>
-            <version>v2.0.0-rc.1</version>
         </dependency>
         
         <!-- Reflections for module scanning -->
@@ -187,6 +177,7 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.1.0</version>
+            <scope>compile</scope>
         </dependency>
         
         <!-- Fast caching (Java 11+ version) -->
@@ -208,6 +199,20 @@
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>11.3.0</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockbukkit.mockbukkit</groupId>
+            <artifactId>mockbukkit-v1.21</artifactId>
+            <version>4.98.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

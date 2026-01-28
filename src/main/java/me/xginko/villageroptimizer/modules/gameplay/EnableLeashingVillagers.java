@@ -22,8 +22,6 @@ public class EnableLeashingVillagers extends VillagerOptimizerModule implements 
 
     public EnableLeashingVillagers() {
         super("gameplay.villagers-can-be-leashed");
-        config.master().addComment(configPath + ".enable",
-                "Enable leashing of villagers, enabling players to easily move villagers to where they want them to be.");
         this.only_optimized = config.getBoolean(configPath + ".only-optimized", false,
                 "If set to true, only optimized villagers can be leashed.");
         this.log_enabled = config.getBoolean(configPath + ".log", false);

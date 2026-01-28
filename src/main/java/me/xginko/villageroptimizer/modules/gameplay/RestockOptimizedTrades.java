@@ -17,8 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -29,13 +31,30 @@ public class RestockOptimizedTrades extends VillagerOptimizerModule implements L
 
     public RestockOptimizedTrades() {
         super("gameplay.restock-optimized-trades");
-        config.master().addComment(configPath,
-                "This is for automatic restocking of trades for optimized villagers. Optimized Villagers\n" +
-                "don't have enough AI to restock their trades naturally, so this is here as a workaround.");
         this.restockDayTimes = new TreeSet<>(Comparator.reverseOrder());
-        this.restockDayTimes.addAll(config.getList(configPath + ".restock-times", Arrays.asList(1000L, 13000L),
-                "At which (tick-)times during the day villagers will restock.\n" +
-                        "There are 24.000 ticks in a single minecraft day."));
+
+        final List<Long> defaults = Arrays.asList(1000L, 13000L);
+        final List<?> rawRestockTimes = config.master().getList(configPath + ".restock-times", new ArrayList<>(defaults));
+        for (Object raw : rawRestockTimes) {
+            if (raw instanceof Number number) {
+                restockDayTimes.add(number.longValue());
+                continue;
+            }
+
+            if (raw instanceof String str) {
+                try {
+                    restockDayTimes.add(Long.parseLong(str));
+                } catch (NumberFormatException ignored) {
+                    // ignore invalid config values
+                }
+            }
+        }
+
+        if (restockDayTimes.isEmpty()) {
+            restockDayTimes.addAll(defaults);
+        }
+
+        config.master().addDefault(configPath + ".restock-times", new ArrayList<>(defaults));
         this.notify_player = config.getBoolean(configPath + ".notify-player", true,
                 "Sends the player a message when the trades were restocked on a clicked villager.");
         this.log_enabled = config.getBoolean(configPath + ".log", false);
