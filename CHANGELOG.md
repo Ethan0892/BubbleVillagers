@@ -5,6 +5,30 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0-BETA] - 2026-04-14
+
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds). Back up your worlds before using.
+
+### ✨ Added
+- Beta support for Paper 26.1.x (new Minecraft versioning: 26.1.2.build.5-alpha).
+- Plugin description now indicates BETA and target Paper version at runtime.
+
+### 🔄 Changed
+- Updated target Paper API from `1.21.10-R0.1-SNAPSHOT` to `26.1.2.build.5-alpha` (new PaperMC release versioning).
+- Updated Java source/target from **17** to **25** (required by Minecraft 26.1.x class files).
+- Updated `api-version` in `plugin.yml` from `'1.21'` to `'26'`.
+- Updated Adventure libraries to `4.26.1` (matching the Paper 26.x bundled Adventure BOM).
+- Updated `adventure-platform-bukkit` to `4.4.1`.
+- Updated `maven-shade-plugin` to `3.6.2` (adds Java 25 class file support).
+- Updated MockBukkit to `4.108.0` (latest `mockbukkit-v1.21` while awaiting `mockbukkit-v26`).
+
+### 🧪 Testing
+- Disabled MockBukkit-based tests (`PluginLifecycleTest`, `AutoOptimizeModesTest`, `ClearGlowCommandTest`) with `@Disabled` annotations — MockBukkit does not yet support Paper 26.x registry changes. Tests will be re-enabled once `mockbukkit-v26` is published.
+
+### 🔒 Known Limitations (Beta)
+- Paper 26.1.x is currently in alpha — use on production servers at your own risk.
+- MockBukkit automated tests are pending `mockbukkit-v26` support.
+
 ## [2.0.2] - 2026-01-08
 
 ### ✨ Added
