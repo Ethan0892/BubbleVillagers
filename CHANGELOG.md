@@ -5,6 +5,16 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2-BETA] - 2026-04-15
+
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x.
+
+### 🐛 Fixed
+- Updated XSeries from `11.3.0` to `13.6.0` — XSeries 11.x could not parse the new Minecraft 26.x major version number and crashed on plugin enable. Version 13.x handles the new versioning scheme correctly.
+- Updated shade exclusions in pom: `SkullCacheListener` was removed in XSeries 12.x and `NMSExtras` moved to `com.cryptomorin.xseries.reflection.minecraft`.
+
+---
+
 ## [2.1.1-BETA] - 2026-04-15
 
 > ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds).
