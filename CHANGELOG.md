@@ -5,6 +5,15 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1-BETA] - 2026-04-15
+
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds).
+
+### 🐛 Fixed
+- Fixed plugin failing to load with `IllegalArgumentException: API version string should be of format "major.minor.patch" or "major.minor"` — changed `api-version` in `plugin.yml` from `'26'` to `'26.1'`.
+
+---
+
 ## [2.1.0-BETA] - 2026-04-14
 
 > ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds). Back up your worlds before using.

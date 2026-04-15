@@ -6,7 +6,7 @@
 
     <groupId>me.xginko</groupId>
     <artifactId>BubbleVillagers</artifactId>
-    <version>2.1.0-BETA</version>
+    <version>2.1.1-BETA</version>
     <packaging>jar</packaging>
 
     <name>BubbleVillagers</name>
