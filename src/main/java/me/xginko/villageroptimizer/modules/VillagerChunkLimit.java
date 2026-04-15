@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules;
 
-import com.cryptomorin.xseries.XEntityType;
 import me.xginko.villageroptimizer.struct.models.ExpiringSet;
 import me.xginko.villageroptimizer.utils.LocationUtil;
 import me.xginko.villageroptimizer.utils.Util;
@@ -8,6 +7,7 @@ import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -149,7 +149,7 @@ public class VillagerChunkLimit extends VillagerOptimizerModule implements Runna
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (event.getEntityType() == XEntityType.VILLAGER.get()) {
+        if (event.getEntityType() == EntityType.VILLAGER) {
             scheduling.regionSpecificScheduler(event.getLocation()).run(() -> {
                 manageVillagerCount(event.getEntity().getChunk());
             });
@@ -158,7 +158,7 @@ public class VillagerChunkLimit extends VillagerOptimizerModule implements Runna
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() == XEntityType.VILLAGER.get()) {
+        if (event.getRightClicked().getType() == EntityType.VILLAGER) {
             scheduling.regionSpecificScheduler(event.getRightClicked().getLocation()).run(() -> {
                 manageVillagerCount(event.getRightClicked().getChunk());
             });
@@ -175,7 +175,7 @@ public class VillagerChunkLimit extends VillagerOptimizerModule implements Runna
         List<Villager> not_optimized_villagers = new ArrayList<>();
 
         for (Entity entity : chunk.getEntities()) {
-            if (entity.getType() != XEntityType.VILLAGER.get()) continue;
+            if (entity.getType() != EntityType.VILLAGER) continue;
 
             Villager villager = (Villager) entity;
 

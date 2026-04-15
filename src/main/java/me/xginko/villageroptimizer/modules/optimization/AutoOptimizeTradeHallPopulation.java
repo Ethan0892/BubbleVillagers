@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.optimization;
 
-import com.cryptomorin.xseries.XEntityType;
 import me.xginko.villageroptimizer.events.VillagerOptimizeEvent;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
 import me.xginko.villageroptimizer.struct.enums.OptimizationType;
@@ -9,6 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,13 +75,13 @@ public class AutoOptimizeTradeHallPopulation extends VillagerOptimizerModule imp
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (event.getEntityType() != XEntityType.VILLAGER.get()) return;
+        if (event.getEntityType() != EntityType.VILLAGER) return;
         checkTradeHallAt(event.getLocation());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() != XEntityType.VILLAGER.get()) return;
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
         checkTradeHallAt(event.getRightClicked().getLocation());
     }
 

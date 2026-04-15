@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.optimization;
 
-import com.cryptomorin.xseries.XEntityType;
 import me.xginko.villageroptimizer.events.VillagerOptimizeEvent;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
 import me.xginko.villageroptimizer.struct.enums.OptimizationType;
@@ -8,6 +7,7 @@ import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,13 +69,13 @@ public class AutoOptimizeChunkPopulation extends VillagerOptimizerModule impleme
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (event.getEntityType() != XEntityType.VILLAGER.get()) return;
+        if (event.getEntityType() != EntityType.VILLAGER) return;
         checkChunk(event.getLocation().getChunk());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() != XEntityType.VILLAGER.get()) return;
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
         checkChunk(event.getRightClicked().getLocation().getChunk());
     }
 
@@ -83,7 +83,7 @@ public class AutoOptimizeChunkPopulation extends VillagerOptimizerModule impleme
         scheduling.regionSpecificScheduler(chunk.getWorld(), chunk.getX(), chunk.getZ()).run(() -> {
             int villagerCount = 0;
             for (Entity entity : chunk.getEntities()) {
-                if (entity.getType() == XEntityType.VILLAGER.get()) villagerCount++;
+                if (entity.getType() == EntityType.VILLAGER) villagerCount++;
             }
 
             if (villagerCount <= threshold) return;

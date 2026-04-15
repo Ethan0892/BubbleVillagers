@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.gameplay;
 
-import com.cryptomorin.xseries.XEntityType;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -9,6 +8,7 @@ import me.xginko.villageroptimizer.utils.LocationUtil;
 import me.xginko.villageroptimizer.utils.Util;
 import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import net.kyori.adventure.text.TextReplacementConfig;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -77,7 +77,7 @@ public class RestockOptimizedTrades extends VillagerOptimizerModule implements L
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() != XEntityType.VILLAGER.get()) return;
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
 
         WrappedVillager wrapped = wrapperCache.get((Villager) event.getRightClicked(), WrappedVillager::new);
         if (!wrapped.isOptimized()) return;

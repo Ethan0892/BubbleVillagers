@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.optimization;
 
-import com.cryptomorin.xseries.XEntityType;
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -12,6 +11,7 @@ import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -102,7 +102,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onEntityPathfind(EntityPathfindEvent event) {
-        if (event.getEntityType() != XEntityType.VILLAGER.get()) return;
+        if (event.getEntityType() != EntityType.VILLAGER) return;
 
         Location location = event.getEntity().getLocation();
         BlockRegion2D region2D = getRegion(location);
@@ -121,7 +121,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
                 .thenAccept(entities -> {
                     for (Entity entity : entities) {
                         scheduling.entitySpecificScheduler(entity).run(() -> {
-                            if (entity.getType() == XEntityType.VILLAGER.get()) {
+                            if (entity.getType() == EntityType.VILLAGER) {
                                 WrappedVillager wrappedVillager = wrapperCache.get((Villager) entity, WrappedVillager::new);
 
                                 if (wrappedVillager.isOptimized()) {
@@ -132,7 +132,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
                                 optimizeCount.incrementAndGet();
                             }
 
-                            if (notifyPlayers && entity.getType() == XEntityType.PLAYER.get()) {
+                            if (notifyPlayers && entity.getType() == EntityType.PLAYER) {
                                 playersWithinArea.add((Player) entity);
                             }
                         }, null);
@@ -169,7 +169,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onEntityInteract(EntityInteractEvent event) {
-        if (event.getEntityType() != XEntityType.VILLAGER.get()) return;
+        if (event.getEntityType() != EntityType.VILLAGER) return;
 
         Location location = event.getEntity().getLocation();
         BlockRegion2D region2D = getRegion(location);
@@ -188,7 +188,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
                 .thenAccept(entities -> {
                     for (Entity entity : entities) {
                         scheduling.entitySpecificScheduler(entity).run(() -> {
-                            if (entity.getType() == XEntityType.VILLAGER.get()) {
+                            if (entity.getType() == EntityType.VILLAGER) {
                                 WrappedVillager wrappedVillager = wrapperCache.get((Villager) entity, WrappedVillager::new);
 
                                 if (wrappedVillager.isOptimized()) {
@@ -199,7 +199,7 @@ public class OptimizeByActivity extends VillagerOptimizerModule implements Liste
                                 optimizeCount.incrementAndGet();
                             }
 
-                            if (notifyPlayers && entity.getType() == XEntityType.PLAYER.get()) {
+                            if (notifyPlayers && entity.getType() == EntityType.PLAYER) {
                                 playersWithinArea.add((Player) entity);
                             }
                         }, null);

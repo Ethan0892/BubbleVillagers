@@ -1,11 +1,11 @@
 package me.xginko.villageroptimizer.modules.gameplay;
 
-import com.cryptomorin.xseries.XEntityType;
-import com.cryptomorin.xseries.XMaterial;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
 import me.xginko.villageroptimizer.utils.LocationUtil;
 import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -45,10 +45,10 @@ public class EnableLeashingVillagers extends VillagerOptimizerModule implements 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onLeash(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() != XEntityType.VILLAGER.get()) return;
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
         final Player player = event.getPlayer();
         final ItemStack handItem = player.getInventory().getItem(event.getHand());
-        if (handItem == null || handItem.getType() != XMaterial.LEAD.parseMaterial()) return;
+        if (handItem == null || handItem.getType() != Material.LEAD) return;
 
         final Villager villager = (Villager) event.getRightClicked();
         if (villager.isLeashed()) return;

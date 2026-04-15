@@ -5,6 +5,16 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.3-BETA] - 2026-04-15
+
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x.
+
+### 🐛 Fixed
+- Removed XSeries dependency entirely — all XSeries versions (11.x–13.x) fail to parse the Minecraft 26.x version string (`26.1.2-2570-e64b1b2`) and crash with `ExceptionInInitializerError` on plugin enable.
+- Replaced `XMaterial`, `XEntityType`, and `XPotion` usages with direct Bukkit API constants (`Material.*`, `EntityType.*`, `PotionEffectType.*`).
+
+---
+
 ## [2.1.2-BETA] - 2026-04-15
 
 > ⚠️ **BETA RELEASE** — Targets Paper 26.1.x.

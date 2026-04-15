@@ -1,7 +1,5 @@
 package me.xginko.villageroptimizer.modules.optimization;
 
-import com.cryptomorin.xseries.XEntityType;
-import com.cryptomorin.xseries.XMaterial;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.struct.enums.OptimizationType;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -15,6 +13,8 @@ import me.xginko.villageroptimizer.wrapper.WrappedVillager;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -72,12 +72,12 @@ public class OptimizeByNametag extends VillagerOptimizerModule implements Listen
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() != XEntityType.VILLAGER.get()) return;
+        if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
         final Player player = event.getPlayer();
         if (!player.hasPermission(Permissions.Optimize.NAMETAG.get())) return;
 
         final ItemStack usedItem = player.getInventory().getItem(event.getHand());
-        if (usedItem != null && usedItem.getType() != XMaterial.NAME_TAG.parseMaterial()) return;
+        if (usedItem != null && usedItem.getType() != Material.NAME_TAG) return;
         if (!usedItem.hasItemMeta()) return;
         final ItemMeta meta = usedItem.getItemMeta();
         if (!meta.hasDisplayName()) return;

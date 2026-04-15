@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.optimization;
 
-import com.cryptomorin.xseries.XMaterial;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.struct.enums.OptimizationType;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -42,8 +41,7 @@ public class OptimizeByBlock extends VillagerOptimizerModule implements Listener
 
     public OptimizeByBlock() {
         super("optimization-methods.block-optimization");
-        List<String> defaults = Stream.of(XMaterial.LAPIS_BLOCK, XMaterial.GLOWSTONE, XMaterial.IRON_BLOCK)
-                .filter(XMaterial::isSupported)
+        List<String> defaults = Stream.of(Material.LAPIS_BLOCK, Material.GLOWSTONE, Material.IRON_BLOCK)
                 .map(Enum::name)
                 .collect(Collectors.toList());
         this.blocks_that_disable = config.getList(configPath + ".materials", defaults,

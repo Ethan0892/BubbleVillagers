@@ -1,8 +1,8 @@
 package me.xginko.villageroptimizer.modules.gameplay;
 
-import com.cryptomorin.xseries.XEntityType;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
 import me.xginko.villageroptimizer.wrapper.WrappedVillager;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,7 +35,7 @@ public class FixOptimisationAfterCure extends VillagerOptimizerModule implements
     private void onTransform(EntityTransformEvent event) {
         if (
                 event.getTransformReason() == EntityTransformEvent.TransformReason.CURED
-                && event.getTransformedEntity().getType() == XEntityType.VILLAGER.get()
+                && event.getTransformedEntity().getType() == EntityType.VILLAGER
         ) {
             Villager villager = (Villager) event.getTransformedEntity();
             scheduling.entitySpecificScheduler(villager).runDelayed(() -> {

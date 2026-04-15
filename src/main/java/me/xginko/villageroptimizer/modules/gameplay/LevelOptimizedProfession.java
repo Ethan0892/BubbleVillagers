@@ -1,6 +1,5 @@
 package me.xginko.villageroptimizer.modules.gameplay;
 
-import com.cryptomorin.xseries.XPotion;
 import me.xginko.villageroptimizer.VillagerOptimizer;
 import me.xginko.villageroptimizer.config.Config;
 import me.xginko.villageroptimizer.modules.VillagerOptimizerModule;
@@ -17,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class LevelOptimizedProfession extends VillagerOptimizerModule implements Listener {
 
     private static final PotionEffect SUPER_SLOWNESS = new PotionEffect(
-            XPotion.SLOWNESS.getPotionEffectType(), 120, 120, false, false);
+            PotionEffectType.SLOWNESS, 120, 120, false, false);
 
     private final boolean notify_player;
     private final long cooldown_millis;
