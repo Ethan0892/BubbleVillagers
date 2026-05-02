@@ -5,6 +5,20 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] - 2026-05-02
+
+### ✨ Added
+- Stable release for Paper 26.1.2 channel readiness.
+
+### 🔄 Changed
+- Bumped plugin version from `2.1.3-BETA` to `2.1.4`.
+- Updated Paper API target to stable build `26.1.2.build.53-stable`.
+- Removed beta tag from plugin runtime description in `plugin.yml`.
+
+### 🧪 Testing
+- Verified build with Java 25 and Maven 3.9.11.
+- Ran Maven test lifecycle successfully (`mvn clean test`).
+
 ## [2.1.3-BETA] - 2026-04-15
 
 > ⚠️ **BETA RELEASE** — Targets Paper 26.1.x.
@@ -27,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.1-BETA] - 2026-04-15
 
-> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds).
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x.
 
 ### 🐛 Fixed
 - Fixed plugin failing to load with `IllegalArgumentException: API version string should be of format "major.minor.patch" or "major.minor"` — changed `api-version` in `plugin.yml` from `'26'` to `'26.1'`.
@@ -36,14 +50,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.0-BETA] - 2026-04-14
 
-> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x (Minecraft 26.1 alpha builds). Back up your worlds before using.
+> ⚠️ **BETA RELEASE** — Targets Paper 26.1.x. Back up your worlds before using.
 
 ### ✨ Added
-- Beta support for Paper 26.1.x (new Minecraft versioning: 26.1.2.build.5-alpha).
+- Beta support for Paper 26.1.x (new Minecraft versioning).
 - Plugin description now indicates BETA and target Paper version at runtime.
 
 ### 🔄 Changed
-- Updated target Paper API from `1.21.10-R0.1-SNAPSHOT` to `26.1.2.build.5-alpha` (new PaperMC release versioning).
+- Updated target Paper API from `1.21.10-R0.1-SNAPSHOT` to `26.1.2.build.53-stable` (new PaperMC release versioning).
 - Updated Java source/target from **17** to **25** (required by Minecraft 26.1.x class files).
 - Updated `api-version` in `plugin.yml` from `'1.21'` to `'26'`.
 - Updated Adventure libraries to `4.26.1` (matching the Paper 26.x bundled Adventure BOM).
@@ -55,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disabled MockBukkit-based tests (`PluginLifecycleTest`, `AutoOptimizeModesTest`, `ClearGlowCommandTest`) with `@Disabled` annotations — MockBukkit does not yet support Paper 26.x registry changes. Tests will be re-enabled once `mockbukkit-v26` is published.
 
 ### 🔒 Known Limitations (Beta)
-- Paper 26.1.x is currently in alpha — use on production servers at your own risk.
+- Paper 26.1.x support remains marked beta in this plugin; validate on staging before production rollout.
 - MockBukkit automated tests are pending `mockbukkit-v26` support.
 
 ## [2.0.2] - 2026-01-08
