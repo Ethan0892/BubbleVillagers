@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import me.xginko.villageroptimizer.commands.VillagerOptimizerCommand;
 import me.xginko.villageroptimizer.config.Config;
 import me.xginko.villageroptimizer.config.LanguageCache;
+import me.xginko.villageroptimizer.events.OptimizedVillagerAwarenessListener;
 import me.xginko.villageroptimizer.events.OptimizedVillagerGlowCleanupListener;
 import me.xginko.villageroptimizer.logging.PluginLogger;
 import me.xginko.villageroptimizer.struct.enums.Permissions;
@@ -55,6 +56,7 @@ public class VillagerOptimizer extends JavaPlugin {
     private static Metrics bStats;
 
     private OptimizedVillagerGlowCleanupListener optimizedVillagerGlowCleanupListener;
+    private OptimizedVillagerAwarenessListener optimizedVillagerAwarenessListener;
 
     @Override
     public void onLoad() {
@@ -148,6 +150,10 @@ public class VillagerOptimizer extends JavaPlugin {
             HandlerList.unregisterAll(optimizedVillagerGlowCleanupListener);
             optimizedVillagerGlowCleanupListener = null;
         }
+        if (optimizedVillagerAwarenessListener != null) {
+            HandlerList.unregisterAll(optimizedVillagerAwarenessListener);
+            optimizedVillagerAwarenessListener = null;
+        }
         VillagerOptimizerModule.ENABLED_MODULES.forEach(VillagerOptimizerModule::disable);
         VillagerOptimizerModule.ENABLED_MODULES.clear();
         VillagerOptimizerCommand.COMMANDS.forEach(VillagerOptimizerCommand::disable);
@@ -221,10 +227,20 @@ public class VillagerOptimizer extends JavaPlugin {
             VillagerOptimizerCommand.reloadCommands();
             VillagerOptimizerModule.reloadModules();
             syncOptimizedVillagerGlowCleanup();
+            syncOptimizedVillagerAwareness();
             config.saveConfig();
         } catch (Exception exception) {
             logger.error("Error during config reload!", exception);
         }
+    }
+
+    private void syncOptimizedVillagerAwareness() {
+        if (optimizedVillagerAwarenessListener == null) {
+            optimizedVillagerAwarenessListener = new OptimizedVillagerAwarenessListener(this);
+            getServer().getPluginManager().registerEvents(optimizedVillagerAwarenessListener, this);
+        }
+
+        optimizedVillagerAwarenessListener.syncLoadedChunks();
     }
 
     private void syncOptimizedVillagerGlowCleanup() {
