@@ -33,7 +33,7 @@ public class RestockOptimizedTrades extends VillagerOptimizerModule implements L
         super("gameplay.restock-optimized-trades");
         this.restockDayTimes = new TreeSet<>(Comparator.reverseOrder());
 
-        final List<Long> defaults = Arrays.asList(1000L, 13000L);
+        final List<Long> defaults = Arrays.asList(1000L, 6000L, 11000L); // 07:00, 12:00, 17:00
         final List<?> rawRestockTimes = config.master().getList(configPath + ".restock-times", new ArrayList<>(defaults));
         for (Object raw : rawRestockTimes) {
             if (raw instanceof Number number) {

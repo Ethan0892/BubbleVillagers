@@ -27,7 +27,16 @@ An optimized villager still trades, restocks and levels up, and still falls and 
 3. Restart the server. Don't use `/reload`.
 4. Edit `plugins/BubbleVillagers/config.yml`, then run `/villageroptimizer reload`.
 
-Upgrading from 2.1.x keeps your configuration. Older versions shipped a `config.yml` with sections that nothing reads: top-level `language`, `optimization`, `cooldowns`, `methods`, `commands`, `notifications`, `performance`, `advanced` and `integrations` (WorldGuard, Vault, database, sounds). They are harmless and can be deleted. Everything that works is listed under [Configuration](#configuration).
+### Upgrading from 2.1.x
+
+Your `config.yml` is kept as it is: the plugin only adds options that are missing and never overwrites a value already in the file. Two defaults changed in 2.2.0, so on an upgraded server you have to apply them yourself:
+
+- **The restock chat message stays on**, because your file already says `notify-player: true`. Set `gameplay.restock-optimized-trades.notify-player` to `false` to turn it off.
+- **The restock times stay at 07:00 and 19:00**, because your file already lists `1000` and `13000`. For the new 07:00, 12:00 and 17:00 set `restock-times` to `1000`, `6000`, `11000`.
+
+Alternatively, delete the whole `restock-optimized-trades` section and run `/villageroptimizer reload`: the plugin writes it back with the new defaults.
+
+Older versions also shipped a `config.yml` with sections that nothing reads: top-level `language`, `optimization`, `cooldowns`, `methods`, `commands`, `notifications`, `performance`, `advanced` and `integrations` (WorldGuard, Vault, database, sounds). They are harmless and can be deleted. Everything that works is listed under [Configuration](#configuration).
 
 ## Optimizing villagers
 
@@ -62,15 +71,14 @@ Times are ticks of the day. Tick 0 is 06:00 and every hour is 1000 ticks:
 |---|---|---|---|---|---|---|
 | Time | 06:00 | 07:00 | 12:00 | 17:00 | 19:00 | 00:00 |
 
-The default `[1000, 13000]` restocks at 07:00 and 19:00, twice a day like vanilla. Three restocks a day at 07:00, 12:00 and 17:00:
+The default `[1000, 6000, 11000]` restocks three times a day, at 07:00, 12:00 and 17:00. Vanilla villagers restock twice a day; to get close to that, use 07:00 and 19:00:
 
 ```yaml
 gameplay:
   restock-optimized-trades:
     restock-times:
     - 1000
-    - 6000
-    - 11000
+    - 13000
 ```
 
 The chat message telling players when the next window opens is off by default; turn on `notify-player` to show it. Players with `villageroptimizer.bypass.restockcooldown` get a restock on every click.
@@ -174,7 +182,7 @@ Every method also has a `log` option, off by default, that writes each action to
 
 | Option | Default | Description |
 |---|---|---|
-| `restock-optimized-trades.restock-times` | `[1000, 13000]` | Restock windows, see [Restocking](#restocking). |
+| `restock-optimized-trades.restock-times` | `[1000, 6000, 11000]` | Restock windows, 07:00, 12:00 and 17:00. See [Restocking](#restocking). |
 | `restock-optimized-trades.notify-player` | `false` | Chat message when a villager is restocked. |
 | `restock-optimized-trades.log` | `false` | Log restocks to the console. |
 | `level-optimized-profession.level-check-cooldown-seconds` | `5` | How often a villager's level is checked. |
@@ -184,6 +192,7 @@ Every method also has a `log` option, off by default, that writes each action to
 | `unoptimize-on-job-loose.enable` | `true` | An optimized villager that loses its profession gets its AI back. |
 | `villagers-can-be-leashed.enable` | `false` | Allow leashing villagers with a lead. |
 | `villagers-can-be-leashed.only-optimized` | `false` | Only optimized ones. |
+| `villagers-can-be-leashed.log` | `false` | Log leashing to the console. |
 | `villagers-spawn-as-adults.enable` | `false` | Villagers spawn as adults instead of babies. |
 | `outline-optimized-villagers.enable` | `false` | Optimized villagers glow. |
 | `prevent-entities-from-targeting-optimized.enable` | `true` | Mobs ignore optimized villagers, which can't flee. |
@@ -223,6 +232,7 @@ Compared to Ethan0892/BubbleVillagers 2.1.8. Details in the [changelog](CHANGELO
 - Optimized villagers came back with their AI on after a chunk unload or a server restart.
 - "Next restock in ..." showed the wrong time after the first restock of the day.
 - Villagers stopped restocking after a numeric `/time set`.
+- Optimized villagers restock three times a day by default, at 07:00, 12:00 and 17:00.
 - The restock chat message is off by default.
 - `config.yml` no longer ships options that nothing reads.
 - Built against Paper 26.2.

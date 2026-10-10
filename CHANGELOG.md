@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **A click on a villager with full trades no longer consumes its restock window** — the interact handler now checks `WrappedVillager#needsRestock()` first, mirroring vanilla `Villager#needsToRestock()`. Opening a villager just to look at its prices used to save the restock time and spend the window for the rest of the period.
 
 ### Changed
+- **Optimized villagers restock three times a day by default** — `gameplay.restock-optimized-trades.restock-times` now defaults to `[1000, 6000, 11000]` (07:00, 12:00 and 17:00) instead of `[1000, 13000]`. Existing configs keep the times they already list; delete the `restock-optimized-trades` section and reload to pick up the new default.
 - **The restock chat message is off by default** — `gameplay.restock-optimized-trades.notify-player` now defaults to `false`. Existing configs keep whatever value they already have.
 - **`config.yml` no longer ships options that nothing reads** — the bundled file listed WorldGuard and Vault integrations, a database, sounds, `optimization.remove-ai`, `restock-interval` and more, none of which the code ever read. It is now just a header; the real options are written by the plugin as before and documented in the README.
 
