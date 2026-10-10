@@ -55,7 +55,7 @@ public class RestockOptimizedTrades extends VillagerOptimizerModule implements L
         }
 
         config.master().addDefault(configPath + ".restock-times", new ArrayList<>(defaults));
-        this.notify_player = config.getBoolean(configPath + ".notify-player", true,
+        this.notify_player = config.getBoolean(configPath + ".notify-player", false,
                 "Sends the player a message when the trades were restocked on a clicked villager.");
         this.log_enabled = config.getBoolean(configPath + ".log", false);
     }
@@ -97,18 +97,30 @@ public class RestockOptimizedTrades extends VillagerOptimizerModule implements L
         long currentFullTimeTicks = wrapped.currentFullTimeTicks();
         long currentDayTimeTicks = wrapped.currentDayTimeTicks();
 
+        // A numeric /time set moves the world clock to an absolute value, possibly backwards. The
+        // stored restock time is then in the future and would block every window until the clock
+        // caught up again, which can take many in-game days. It belongs to a timeline that no
+        // longer exists, so treat the villager as never restocked.
+        if (lastRestockFullTimeTicks > currentFullTimeTicks) lastRestockFullTimeTicks = 0L;
+
         long currentDay = currentFullTimeTicks - currentDayTimeTicks;
-        long ticksTillRestock = (24000 + currentDay + restockDayTimes.first()) - currentFullTimeTicks;
+        // Falls back to tomorrow's earliest window when none is left today. The set is in reverse
+        // order, so the earliest one is last().
+        long ticksTillRestock = (24000 + currentDay + restockDayTimes.last()) - currentFullTimeTicks;
 
         boolean restocked = false;
 
         for (Long restockDayTime : restockDayTimes) {
             long restockTimeToday = currentDay + restockDayTime;
 
-            if (currentFullTimeTicks < restockTimeToday || lastRestockFullTimeTicks >= restockTimeToday) {
+            if (currentFullTimeTicks < restockTimeToday) {
+                // Only windows still ahead of us can be the next restock. A window that already
+                // passed today would give a negative distance here.
                 ticksTillRestock = Math.min(ticksTillRestock, restockTimeToday - currentFullTimeTicks);
                 continue;
             }
+
+            if (lastRestockFullTimeTicks >= restockTimeToday) continue;
 
             if (!restocked) {
                 wrapped.restock();
