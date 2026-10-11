@@ -5,6 +5,24 @@ All notable changes to BubbleVillagers will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-10-10
+
+### Fixed
+- **Optimized villagers came back with their AI enabled after a chunk unload or a server restart** — the optimization type lives in the villager's persistent data container, but the awareness flag was only ever written once. `LevelOptimizedProfession` turns awareness back on for 100 ticks while a villager levels up; if the chunk unloaded or the server stopped in that window, the villager was saved aware while still being marked as optimized, and nothing ever put the two back in agreement. A new `OptimizedVillagerAwarenessListener` re-applies the flag whenever a villager's entities load (`EntitiesLoadEvent`, since entities attach separately from their chunk) and once for everything already loaded at startup, so the stored state and the entity state can no longer drift apart.
+- **Restocked trades stayed greyed out until the trade screen was reopened** — `WrappedVillager#restock()` queued the `setUses(0)` work on the entity scheduler, which runs on the *next* tick on both Paper and Folia. The merchant offers packet is sent to the client as soon as the `PlayerInteractEntityEvent` finishes, so the player saw the "trades restocked" message next to still-depleted (red X) trades until they closed and reopened the villager. The restock now runs inline when the caller is already on the villager's owning region thread, and only falls back to the entity scheduler otherwise (Folia stays supported).
+- Players with `villageroptimizer.bypass.restockcooldown` now also update the villager's stored restock time, keeping the cooldown state consistent with the normal code path.
+- **Optimized villagers stopped restocking after a numeric `/time set`** — the last restock is stored as the world's absolute clock time, and a numeric `/time set` moves that clock to an absolute value, often backwards. The stored time then sat in the future and blocked every window until the clock caught up again, which on a long-running world means many in-game days for every optimized villager. A stored time ahead of the clock is now treated as never restocked. (`/time set day`, `noon` and friends always move forward and were not affected.)
+- **"Next restock in ..." showed the wrong time after the first restock of the day** — the countdown fed windows that had already passed today into `Math.min`, producing a negative distance that `Util.formatDuration` then silently flipped positive, and the fallback for "no window left today" used the latest configured window instead of the earliest one. With the default `restock-times` a restock at 20:00 after one at 08:00 announced the next one in 10m50s instead of 9m10s. Only windows still ahead count now, with tomorrow's earliest window as the fallback. When restocks happen is unchanged.
+- **A click on a villager with full trades no longer consumes its restock window** — the interact handler now checks `WrappedVillager#needsRestock()` first, mirroring vanilla `Villager#needsToRestock()`. Opening a villager just to look at its prices used to save the restock time and spend the window for the rest of the period.
+
+### Changed
+- **Optimized villagers restock three times a day by default** — `gameplay.restock-optimized-trades.restock-times` now defaults to `[1000, 6000, 11000]` (07:00, 12:00 and 17:00) instead of `[1000, 13000]`. Existing configs keep the times they already list; delete the `restock-optimized-trades` section and reload to pick up the new default.
+- **The restock chat message is off by default** — `gameplay.restock-optimized-trades.notify-player` now defaults to `false`. Existing configs keep whatever value they already have.
+- **`config.yml` no longer ships options that nothing reads** — the bundled file listed WorldGuard and Vault integrations, a database, sounds, `optimization.remove-ai`, `restock-interval` and more, none of which the code ever read. It is now just a header; the real options are written by the plugin as before and documented in the README.
+
+### Updated
+- **Paper API** — Updated the compilation target to `26.2.build.133-stable` and the `plugin.yml` `api-version` to `26.2`.
+
 ## [2.1.8] - 2026-07-20
 
 ### Fixed
